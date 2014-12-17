@@ -1,8 +1,6 @@
 %{
-#include "write.h"
 #include <cstdio>
 #include<iostream>
-#include <fstream>
 using namespace std;
 
 extern "C" int yylex ();
