@@ -87,8 +87,6 @@ beamy			[\n]*[,]+{digits}+[]]
 
 [ \n]
 
-{digits}	{yylval.srnum = atoi(yytext);
-			return srnum; }
 x{nodes}+	{ yylval.xnodes = splitnodex(yytext);
 			return xnodes; }
 y{nodes}+	{yylval.ynodes = splitnodey(yytext);

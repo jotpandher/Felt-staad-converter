@@ -11,38 +11,36 @@ extern "C" FILE *yyin;
 
 void yyerror(const char *s);
 #define YYDEBUG 1
-write_function s;
 %}
 
 %union{
 	
-	int  srnum;
 	float xnodes;
 	float ynodes;
 	float znodes;
 	float beamx;
 	float beamy;
 }
-%token	srnum;
-%token xnodes ynodes znodes;
-%token  beamx beamy;
+
+%token <xnodes> xnodes;
+%token <ynodes> ynodes;
+%token <znodes> znodes;
+%token  <beamx> beamx;
+%token <beamy> beamy;
 
 %%
 
-FELT:
+FELT:/*empty*/
 	|FELT xnodes {cout<<$2<<endl; }
-	FELT srnum {cout<<$2<<endl;   } 
-
-	| FELT ynodes { cout<<""<<endl; }
-	| FELT znodes { cout<<""<<endl;}
-	| FELT beamx  { cout<< ""<<endl;}
-	| FELT beamy  {cout <<"" <<endl;}
-	| srnum  { cout<<" "<<endl;}
+	| FELT ynodes { cout<<$2<<endl; }
+	| FELT znodes { cout<<$2<<endl;}
+	| FELT beamx  { cout<< $2<<endl;}
+	| FELT beamy  {cout <<$2 <<endl;}
 	| xnodes  {cout<<$1<<endl;}
-	| ynodes        { cout<<""<<endl;}
-	| znodes {cout<<""<<endl;}
-	|beamx{ cout<<""<<endl;}
-	|beamy { cout<< ""<<endl;}
+	| ynodes        { cout<<$1<<endl;}
+	| znodes {cout<<$1<<endl;}
+	|beamx{ cout<<$1<<endl;}
+	|beamy { cout<< $1<<endl;}
 
 %%
 
@@ -62,11 +60,10 @@ main()
 
 	do{
 
-	yydebug = 1;
+//	yydebug = 1;
 
 	yyparse();
 	} while (!feof(yyin));
-	s.write_end_function("*", 70);
 
 }
 
