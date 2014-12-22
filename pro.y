@@ -13,41 +13,34 @@ void yyerror(const char *s);
 
 %union{
 	
-	float xnodes;
-	float ynodes;
-	float znodes;
-	float beamx;
-	float beamy;
+	float f;
 }
 
-%token <xnodes> xnodes;
-%token <ynodes> ynodes;
-%token <znodes> znodes;
-%token  <beamx> beamx;
-%token <beamy> beamy;
+%token <f> xnodes ynodes znodes;
+%token <f> beamx beamy;
 
 %%
 
 FELT:/*empty*/
-	|FELT xnodes {cout<<$2<<endl; }
-	| FELT ynodes { cout<<$2<<endl; }
-	| FELT znodes { cout<<$2<<endl;}
-	| FELT beamx  { cout<< $2<<endl;}
-	| FELT beamy  {cout <<$2 <<endl;}
-	| xnodes  {cout<<$1<<endl;}
-	| ynodes        { cout<<$1<<endl;}
-	| znodes {cout<<$1<<endl;}
-	|beamx{ cout<<$1<<endl;}
-	|beamy { cout<< $1<<endl;}
+	FELT xnodes	{ cout << $2 << endl; }
+	| FELT ynodes	{ cout << $2 << endl; }
+	| FELT znodes	{ cout << $2 << endl;}
+	| FELT beamx	{ cout << $2 << endl;}
+	| FELT beamy	{ cout << $2 << endl;}
+	| xnodes	{ cout << $1 << endl;}
+	| ynodes        { cout << $1 << endl;}
+	| znodes 	{ cout << $1 << endl;}
+	| beamx		{ cout << $1 << endl;}
+	| beamy 	{ cout << $1 << endl;}
 
 %%
 
 main()
 {	string file_name, input_file;
-	cout<<" Enter the name of input file:\n";
-	cin>>file_name;
+//	cout<<" Enter the name of input file:\n";
+//	cin>>file_name;
 
-	 FILE *text= fopen(input_file.c_str(), "r");
+	 FILE *text= fopen("beam.flt", "r");
  	if (!text) {
 		cout << "I can't open this file" << endl;
 		return -1;

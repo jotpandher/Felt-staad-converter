@@ -5,7 +5,7 @@ using namespace std;
 #define YY_DECL extern "C" int yylex()
 
 #include "pro.tab.h"
-float splitnodex( string s )
+/*float splitnodex( string s )
 {
 	string delimiter = "= ";
 
@@ -31,21 +31,19 @@ float splitnodey( string s )
         t = atof(s.c_str());
         return t;
 }
-
-float splitnodez( string s )
+*/
+float splitnode( string s )
 {
-        string delimiter = "= ";
-
+        string delimiter = "=";
+	float t;
         size_t pos = 0;
         while ((pos = s.find(delimiter)) != string::npos)
         {
                 s.erase(0, pos + delimiter.length());
         }
-        float t;
         t = atof(s.c_str());
         return t;
 }
-
 float splitbeamx( string s )
 {
         string delimiter = "[ ";
@@ -79,7 +77,7 @@ float splitbeamy( string s )
 digits			[0-9]+	
 float			{digits}*"."{digits}	
 text			[a-zA-Z]+
-nodes			[\t]*[=]+{digits}
+nodes			[\t]*(=){digits}+
 beamx			[=]+[[]+{digits}+
 beamy			[\n]*[,]+{digits}+[]]
 
@@ -87,15 +85,15 @@ beamy			[\n]*[,]+{digits}+[]]
 
 [ \n]
 
-x{nodes}+	{ yylval.xnodes = splitnodex(yytext);
+x{nodes}	{ yylval.f = splitnode(yytext);
 			return xnodes; }
-y{nodes}+	{yylval.ynodes = splitnodey(yytext);
+y{nodes}	{ yylval.f = splitnode(yytext);
 			return ynodes; }
-z{nodes}+	{yylval.znodes = splitnodez(yytext);
+z{nodes}	{ yylval.f = splitnode(yytext);
 			return znodes; }
-{beamx}+	{yylval.beamx = splitbeamx(yytext);
+{beamx}+	{ yylval.f = splitbeamx(yytext);
 			return beamx; }
-{beamy}+	{yylval.beamy = splitbeamy(yytext);
+{beamy}+	{ yylval.f = splitbeamy(yytext);
 			return beamy; }
 .		;
 
