@@ -37,8 +37,6 @@ FELT:/*empty*/
 
 main()
 {	string file_name, input_file;
-//	cout<<" Enter the name of input file:\n";
-//	cin>>file_name;
 
 	 FILE *text= fopen("beam.flt", "r");
  	if (!text) {
@@ -51,7 +49,6 @@ main()
 
 	do{
 
-//	yydebug = 1;
 
 	yyparse();
 	} while (!feof(yyin));

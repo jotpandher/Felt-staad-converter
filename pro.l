@@ -5,33 +5,6 @@ using namespace std;
 #define YY_DECL extern "C" int yylex()
 
 #include "pro.tab.h"
-/*float splitnodex( string s )
-{
-	string delimiter = "= ";
-
-	size_t pos = 0;
-	while ((pos = s.find(delimiter)) != string::npos)
-	{
-    		s.erase(0, pos + delimiter.length());
-	}
-	float t;
-	t = atof(s.c_str());
-	return t;
-}
-float splitnodey( string s )
-{
-        string delimiter = "= ";
-
-        size_t pos = 0;
-        while ((pos = s.find(delimiter)) != string::npos)
-        {
-                s.erase(0, pos + delimiter.length());
-        }
-        float t;
-        t = atof(s.c_str());
-        return t;
-}
-*/
 float splitnode( string s )
 {
         string delimiter = "=";
