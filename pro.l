@@ -50,8 +50,8 @@ float splitbeamy( string s )
 digits			[0-9]+	
 float			{digits}*"."{digits}	
 text			[a-zA-Z]+
-nodes			[\t]*(=){digits}+
-beamx			[=]+[[]+{digits}+
+nodes			{digits}+
+beamx			{digits}+
 beamy			[\n]*[,]+{digits}+[]]
 
 %%
