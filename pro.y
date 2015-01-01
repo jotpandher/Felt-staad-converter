@@ -1,6 +1,9 @@
 %{
 #include <cstdio>
-#include<iostream>
+#include <iostream>
+#include <fstream>
+#include <ctime>
+#include "write.h"
 using namespace std;
 
 extern "C" int yylex ();
@@ -9,49 +12,68 @@ extern "C" FILE *yyin;
 
 void yyerror(const char *s);
 #define YYDEBUG 1
+Write_function fn;
+ofstream fout;
 %}
 
 %union{
 	
 	float f;
+	char* s;
 }
 
-%token <f> xnodes ynodes znodes;
-%token <f> beamx beamy;
+%token <s> line1 line2 line3 xnodes ynodes;
 
 %%
 
 FELT:/*empty*/
-	FELT xnodes	{ cout << $2 << endl; }
-	| FELT ynodes	{ cout << $2 << endl; }
-	| FELT znodes	{ cout << $2 << endl;}
-	| FELT beamx	{ cout << $2 << endl;}
-	| FELT beamy	{ cout << $2 << endl;}
-	| xnodes	{ cout << $1 << endl;}
-	| ynodes        { cout << $1 << endl;}
-	| znodes 	{ cout << $1 << endl;}
-	| beamx		{ cout << $1 << endl;}
-	| beamy 	{ cout << $1 << endl;}
-
+	FELT xnodes	{ fout <<"JOINT COORDINATES" << endl; }
+	| FELT ynodes	{ fout << "MEMBER INCIDENTS" << endl; }
+	| FELT line1	{ fout << ""; }
+	| FELT line2	{ fout << ""; }
+	| FELT line3 	{ fout << ""; }
+	| xnodes	{ fout <<"JOINT COORDINATES" << endl; }
+	| ynodes	{ fout << "MEMBER INCIDENTS" << endl; }
+	| line1		{ fout << ""<<endl; }
+	| line2		{ fout << "" <<endl; }
+	| line3		{ fout << ""<< endl; }
+	;	
 %%
 
 main()
-{	string file_name, input_file;
+{	string file_name, input_file, input_text;
 
 	 FILE *text= fopen("beam.flt", "r");
  	if (!text) {
 		cout << "I can't open this file" << endl;
 		return -1;
 	}
+	time_t now = time(0);
+	char* dt = ctime(&now);
 
-        yyin = text; 
+        yyin = text; //flex reads its input from yyin
 
-
+/*	while(1)
+	{
+		input_text = fgetc(yyin);
+		if( feof(yyin) )
+		{
+			break;
+		}
+		cout << input_text;
+	}
+*/	
+	fn.write_function();
+	fout.open("staad_file.std", std::ofstream::out);
+	fout << "STAAD SPACE\nSTART JOB INFORMATION\nENGINEER DATE "<<dt<<"END JOB INFORMATION\nINPUT WIDTH 79\nUNIT METER KN"<<endl;
 	do{
+	 yyparse(); //This function reads tokens, executes actions, and 
+		    //ultimately returns when it encounters end-of-input or an unrecoverable syntax.
 
-
-	yyparse();
 	} while (!feof(yyin));
+
+
+// 	fn.writeFeltFile("nodes");
 
 }
 

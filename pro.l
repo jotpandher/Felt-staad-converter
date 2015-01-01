@@ -1,6 +1,7 @@
 %{
 #include <iostream>
 #include <string>
+#include "write.h"
 using namespace std;
 #define YY_DECL extern "C" int yylex()
 
@@ -50,23 +51,21 @@ float splitbeamy( string s )
 digits			[0-9]+	
 float			{digits}*"."{digits}	
 text			[a-zA-Z]+
-nodes			{digits}+
 beamx			{digits}+
 beamy			[\n]*[,]+{digits}+[]]
 
 %%
 
-[ \n]
+[ \n] 				
+problem\ description		{ yylval.s = (yytext); return line1; }
 
-x{nodes}	{ yylval.f = splitnode(yytext);
-			return xnodes; }
-y{nodes}	{ yylval.f = splitnode(yytext);
-			return ynodes; }
-z{nodes}	{ yylval.f = splitnode(yytext);
-			return znodes; }
-{beamx}+	{ yylval.f = splitbeamx(yytext);
-			return beamx; }
-{beamy}+	{ yylval.f = splitbeamy(yytext);
-			return beamy; }
+^title=[a-zA-Z0-9]*		{ yylval.s = (yytext); return line2; }
+
+^nodes=[0-9]*			{ yylval.s = (yytext); return line3; }
+
+^nodes\ *			{ yylval.s = (yytext); return xnodes; }
+
+^beam\ elements  		{ yylval.s = (yytext); return ynodes; }
+
 .		;
 
