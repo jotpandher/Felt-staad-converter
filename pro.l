@@ -51,30 +51,34 @@ float splitbeamy( string s )
 digits			[0-9]+	
 float			{digits}*"."{digits}	
 text			[a-zA-Z]+
+nodes			[\t]*(=){digits}+
 beamx			(nodes=)\[{digits}+
 beamy			[,]{digits}+
 
 %%
 
-[ \n] 				
-{beamx}				{ yylval.f = splitbeamx(yytext); return beamx; }
-
-{beamy}                         { yylval.f = splitbeamy(yytext); return beamy; }
-
+[ \n]
+ 				
 problem\ description		{ yylval.s = (yytext); return line1; }
 
-^nodes=[a-zA-Z0-9]*\n$		{ yylval.s = (yytext); return line3; }
+^title=\"[a-zA-Z0-9]*$\"        {yylval.s = (yytext); return line2; }
 
-^nodes\ *			{ yylval.s = (yytext); return xnodes; }
+^nodes=[a-zA-Z0-9]*\n$		{yylval.s = (yytext); return line3; }
 
-^beam\ elements  		{ yylval.s = (yytext); return ynodes; }
+^nodes\ *			{ yylval.s = (yytext); return entity_name; }
+
+^beam\ elements  		{ yylval.s = (yytext); return entity_type; }
 
 ^[0-9]+				{ yylval.i = atoi(yytext); return serial_no; }
 
-[a-zA-Z]*=[0-9]*		{ yylval.f = splitnode(yytext); return num;}
+{nodes}				{ yylval.f = splitnode(yytext); return nodes;}
+
+{beamx}                         { yylval.f = splitbeamx(yytext); return beam_x; }
+
+{beamy}                         { yylval.f = splitbeamy(yytext); return beam_y; }
 
 
-^title=\"[a-zA-Z0-9]*$\"		{yylval.s = (yytext); return line2; }
+
 
 .		;
 
