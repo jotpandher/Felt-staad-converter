@@ -22,8 +22,8 @@ ofstream fout;
 	float f;
 	char* s;
 }
-%token <i>  serial_no beamx;
-%token <f>  num beamy;
+%token <i>  serial_no ;
+%token <f>  num beamy beamx;
 %token <s> line1 line2 line3 xnodes ynodes blank;
 
 %%
@@ -37,7 +37,7 @@ FELT:/*empty*/
 	| FELT num	{ fout << $2<<" ";}
 	| FELT serial_no{ fout <<"\n"<<$2<<" ";}
 	| FELT beamx	{ fout << $2<<" ";}
-	| FELT beamy	{ fout << $2; }
+	| FELT beamy	{ fout << $2 << "; "; }
 	| FELT blank	{ fout << ""; }
 	| xnodes	{ fout <<"JOINT COORDINATES"; }
 	| ynodes	{ fout <<"\nMEMBER INCIDENTS"; }
@@ -46,8 +46,8 @@ FELT:/*empty*/
 	| line3		{ fout << ""<< endl; }
 	| num		{ fout << $1<<" "; }
 	| serial_no	{ fout <<"\n"<<$1<<" "; }
-	| beamx		{ fout <<$1; }
-	| beamy		{ fout <<$1; }
+	| beamx		{ fout << $1; }
+	| beamy		{ fout << $1 << ";\n"; }
 	| blank		{ fout <<""; }
 	;	
 %%

@@ -51,12 +51,16 @@ float splitbeamy( string s )
 digits			[0-9]+	
 float			{digits}*"."{digits}	
 text			[a-zA-Z]+
-beamx			{digits}+
-beamy			[,]+{digits}+[]]
+beamx			(nodes=)\[{digits}+
+beamy			[,]{digits}+
 
 %%
 
 [ \n] 				
+{beamx}				{ yylval.f = splitbeamx(yytext); return beamx; }
+
+{beamy}                         { yylval.f = splitbeamy(yytext); return beamy; }
+
 problem\ description		{ yylval.s = (yytext); return line1; }
 
 ^nodes=[a-zA-Z0-9]*\n$		{ yylval.s = (yytext); return line3; }
@@ -69,7 +73,6 @@ problem\ description		{ yylval.s = (yytext); return line1; }
 
 [a-zA-Z]*=[0-9]*		{ yylval.f = splitnode(yytext); return num;}
 
-[0-9]*				{ yylval.i = atoi(yytext); return beamx;}
 
 ^title=\"[a-zA-Z0-9]*$\"		{yylval.s = (yytext); return line2; }
 
