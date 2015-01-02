@@ -20,7 +20,7 @@ float splitnode( string s )
 }
 float splitbeamx( string s )
 {
-        string delimiter = "[ ";
+        string delimiter = "[";
 
         size_t pos = 0;
         while ((pos = s.find(delimiter)) != string::npos)
@@ -39,7 +39,7 @@ float splitbeamy( string s )
         size_t pos = 0;
         while ((pos = s.find(delimiter)) != string::npos)
         {
-                s.erase(0, pos + delimiter.length());
+                s.erase(0, pos+delimiter.length());
         }
         float t;
         t = atof(s.c_str());
@@ -52,20 +52,26 @@ digits			[0-9]+
 float			{digits}*"."{digits}	
 text			[a-zA-Z]+
 beamx			{digits}+
-beamy			[\n]*[,]+{digits}+[]]
+beamy			[,]+{digits}+[]]
 
 %%
 
 [ \n] 				
 problem\ description		{ yylval.s = (yytext); return line1; }
 
-^title=[a-zA-Z0-9]*		{ yylval.s = (yytext); return line2; }
-
-^nodes=[0-9]*			{ yylval.s = (yytext); return line3; }
+^nodes=[a-zA-Z0-9]*\n$		{ yylval.s = (yytext); return line3; }
 
 ^nodes\ *			{ yylval.s = (yytext); return xnodes; }
 
 ^beam\ elements  		{ yylval.s = (yytext); return ynodes; }
+
+^[0-9]+				{ yylval.i = atoi(yytext); return serial_no; }
+
+[a-zA-Z]*=[0-9]*		{ yylval.f = splitnode(yytext); return num;}
+
+[0-9]*				{ yylval.i = atoi(yytext); return beamx;}
+
+^title=\"[a-zA-Z0-9]*$\"		{yylval.s = (yytext); return line2; }
 
 .		;
 

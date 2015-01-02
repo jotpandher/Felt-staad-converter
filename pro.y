@@ -18,25 +18,37 @@ ofstream fout;
 
 %union{
 	
+	int i;
 	float f;
 	char* s;
 }
-
-%token <s> line1 line2 line3 xnodes ynodes;
+%token <i>  serial_no beamx;
+%token <f>  num beamy;
+%token <s> line1 line2 line3 xnodes ynodes blank;
 
 %%
 
 FELT:/*empty*/
-	FELT xnodes	{ fout <<"JOINT COORDINATES" << endl; }
-	| FELT ynodes	{ fout << "MEMBER INCIDENTS" << endl; }
+	FELT xnodes	{ fout <<"JOINT COORDINATES"; }
+	| FELT ynodes	{ fout <<"\nMEMBER INCIDENTS"; }
 	| FELT line1	{ fout << ""; }
 	| FELT line2	{ fout << ""; }
 	| FELT line3 	{ fout << ""; }
-	| xnodes	{ fout <<"JOINT COORDINATES" << endl; }
-	| ynodes	{ fout << "MEMBER INCIDENTS" << endl; }
+	| FELT num	{ fout << $2<<" ";}
+	| FELT serial_no{ fout <<"\n"<<$2<<" ";}
+	| FELT beamx	{ fout << $2<<" ";}
+	| FELT beamy	{ fout << $2; }
+	| FELT blank	{ fout << ""; }
+	| xnodes	{ fout <<"JOINT COORDINATES"; }
+	| ynodes	{ fout <<"\nMEMBER INCIDENTS"; }
 	| line1		{ fout << ""<<endl; }
 	| line2		{ fout << "" <<endl; }
 	| line3		{ fout << ""<< endl; }
+	| num		{ fout << $1<<" "; }
+	| serial_no	{ fout <<"\n"<<$1<<" "; }
+	| beamx		{ fout <<$1; }
+	| beamy		{ fout <<$1; }
+	| blank		{ fout <<""; }
 	;	
 %%
 
