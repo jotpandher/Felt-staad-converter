@@ -6,6 +6,7 @@ using namespace std;
 #define YY_DECL extern "C" int yylex()
 
 #include "pro.tab.h"
+
 float splitnode( string s )
 {
         string delimiter = "=";
@@ -51,34 +52,32 @@ float splitbeamy( string s )
 digits			[0-9]+	
 float			{digits}*"."{digits}	
 text			[a-zA-Z]+
-nodes			[\t]*(=){digits}+
 beamx			(nodes=)\[{digits}+
 beamy			[,]{digits}+
+nodes                   [\t]*(=){digits}+
 
 %%
 
-[ \n]
- 				
-problem\ description		{ yylval.s = (yytext); return line1; }
+[ \n] 				
+{beamx}			{ yylval.f = splitbeamx(yytext); return beamx; }
 
-^title=\"[a-zA-Z0-9]*$\"        {yylval.s = (yytext); return line2; }
+{beamy}                 { yylval.f = splitbeamy(yytext); return beamy; }
 
-^nodes=[a-zA-Z0-9]*\n$		{yylval.s = (yytext); return line3; }
+x{nodes}	        { yylval.f = splitnode(yytext); return xnodes; }
 
-^nodes\ *			{ yylval.s = (yytext); return entity_name; }
+y{nodes}        	{ yylval.f = splitnode(yytext); return ynodes; }
 
-^beam\ elements  		{ yylval.s = (yytext); return entity_type; }
+z{nodes}      		{ yylval.f = splitnode(yytext); return znodes; }
 
-^[0-9]+				{ yylval.i = atoi(yytext); return serial_no; }
+problem\ description	{ yylval.s = (yytext); return line1; }
 
-{nodes}				{ yylval.f = splitnode(yytext); return nodes;}
+^nodes=[a-zA-Z0-9]*\n$	{ yylval.s = (yytext); return line3; }
 
-{beamx}                         { yylval.f = splitbeamx(yytext); return beam_x; }
+^[0-9]+			{ yylval.i = atoi(yytext); return serial_no; }
 
-{beamy}                         { yylval.f = splitbeamy(yytext); return beam_y; }
+[a-zA-Z]*=[0-9]*	{ yylval.f = splitnode(yytext); return num;}
 
-
-
+^title=\"[a-zA-Z0-9]*$\" {yylval.s = (yytext); return line2; }
 
 .		;
 

@@ -23,32 +23,34 @@ ofstream fout;
 	char* s;
 }
 %token <i>  serial_no ;
-%token <f>  nodes beam_x beam_y;
-%token <s> line1 line2 line3 entity_name entity_type blank;
+%token <f>  num beamy beamx xnodes ynodes znodes;
+%token <s> line1 line2 line3 blank;
 
 %%
 
 FELT:/*empty*/
-	FELT entity_name	{ fout <<"JOINT COORDINATES"; }
-	| FELT entity_type	{ fout <<"\nMEMBER INCIDENTS"; }
-	| FELT line1		{ fout << ""; }
-	| FELT line2		{ fout << ""; }
-	| FELT line3 		{ fout << ""; }
-	| FELT nodes		{ fout << $2<<" ";}
-	| FELT serial_no	{ fout <<"\n"<<$2<<" ";}
-	| FELT beam_x		{ fout << $2<<" ";}
-	| FELT beam_y		{ fout << $2 << "; "; }
-	| FELT blank		{ fout << ""; }
-	| entity_name		{ fout <<"JOINT COORDINATES"; }
-	| entity_type		{ fout <<"\nMEMBER INCIDENTS"; }
-	| line1			{ fout << ""<<endl; }
-	| line2			{ fout << "" <<endl; }
-	| line3			{ fout << ""<< endl; }
-	| nodes			{ fout << $1<<" "; }
-	| serial_no		{ fout <<"\n"<<$1<<" "; }
-	| beam_x		{ fout << $1; }
-	| beam_y		{ fout << $1 << ";\n"; }
-	| blank			{ fout <<""; }
+	FELT xnodes	{ fout << "JOINT COORDINATES"; }
+	| FELT ynodes	{ fout << "\nMEMBER INCIDENTS"; }
+	| FELT znodes	{ }
+	| FELT line1	{ fout << ""; }
+	| FELT line2	{ fout << ""; }
+	| FELT line3 	{ fout << ""; }
+	| FELT num	{ fout << $2<<" ";}
+	| FELT serial_no{ fout <<"\n"<<$2<<" ";}
+	| FELT beamx	{ fout << $2<<" ";}
+	| FELT beamy	{ fout << $2 << "; "; }
+	| FELT blank	{ fout << ""; }
+	| xnodes	{ fout <<"JOINT COORDINATES"; }
+	| ynodes	{ fout <<"\nMEMBER INCIDENTS"; }
+	| znodes	{ }
+	| line1		{ fout << ""<<endl; }
+	| line2		{ fout << "" <<endl; }
+	| line3		{ fout << ""<< endl; }
+	| num		{ fout << $1<<" "; }
+	| serial_no	{ fout <<"\n"<<$1<<" "; }
+	| beamx		{ fout << $1; }
+	| beamy		{ fout << $1 << ";\n"; }
+	| blank		{ fout <<""; }
 	;	
 %%
 
