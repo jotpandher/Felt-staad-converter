@@ -7,16 +7,19 @@
 
 using namespace std;
 
-class Write_function
+class write
 {
 	string input_file, output_file, file_name;
+	float jc[1024], mi[1024];
+	int jc_count, mi_count;
+	
 
 	public:
-	int ch;
 
 	void write_function();
-	void writeFeltFile_Joint_coordinates(float s, char nodes);
-	void write_end_function(string symbol, int times);
-	void writeFeltFile(std::string s);
+	void write_staad_file();
+	void write_join_coordinates();
+	void write_member_incidences();
+	void write_end_file();
 };
 #endif
