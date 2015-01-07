@@ -1,45 +1,48 @@
 #include "write.h"
-
-	void write::write_function()
+	void Write_function::write_function()
 	{
 		cout<<"\nOUTPUT FILE GENERATED IS: staad_file.std\n";
+		/*cin>> file_name;
+		input_file = file_name + ".flt";
+		output_file = file_name + ".std";
+		ofstream f(output_file.c_str(), ios::out);
+		*/
 	}	
 
-	void write::write_staad_file()
+	void Write_function::write_end_function(string symbol, int times)
 	{
-		time_t now = time(0);
-       		char* dt = ctime(&now);
-		ofstream f(output_file.c_str(), ios::out); 
-	f<< "STAAD SPACE\n""START JOB INFORMATION\n""ENGINEER DATE "<< dt <<"END JOB INFORMATION\n""INPUT WIDTH 79\n""UNIT METER KN"<<endl;
+		for(int n= 0; n< times; n++)
+		{
+			cout<< symbol;	
 		}
-
-	void write::write_join_coordinates()
-	{
-		ofstream f(output_file.c_str(), ios::out);
-		f<<"JOINT COORDINATES"<<endl;
-		
-		for (int i=1, j=1; j <= jc_count; i++)
-		{ 		f<< j <<" ";
-		 	f<< "x=" <<" " << "y=" << " "<< "z=" <<";";
-			j++;
-		}
-			f<< endl;
-}	
-	
-	void write::write_member_incidences()
-	{
-		ofstream f(output_file.c_str(), ios::app);
-		f<<"MEMBER INCIDENCES"<<endl;
-		for (int i=1, j=1; j<= mi_count; i++)
-		{ f<< j << " " << "beam_x[i]" << " " << "beam_y[i]" << ";" ;
-		}
-			f << endl;
-
+		cout<<endl; 
 	}
 
-	void write::write_end_file() 
+	void Write_function::writeFeltFile(std::string s)
 	{
+		ofstream f(output_file.c_str(), ios::app); //c_str() ????
+		
+		if (s.compare("nodes")==0)
+		{ 
+			f<<" JOINT COORDINATES";
+		}
+		else if (s.compare("beam elements")==0)
+		{ 
+			f<<"MEMBER INCIDENCES";
+		}
+	}
+
+	void Write_function::writeFeltFile_Joint_coordinates(float s, char nodes)
+	{
+		cout<<"***********shaina************";
 		ofstream f(output_file.c_str(), ios::app);
-		f << endl << "FINISH";
-	}	
+		if (nodes=='x')
+			f<<s;
+		else if(nodes=='y')
+			f<< s;
+		 else if(nodes=='z')
+			f<< s;
+		f.close();
+	}
+
 
