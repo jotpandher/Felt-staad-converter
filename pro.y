@@ -12,7 +12,7 @@ extern "C" FILE *yyin;
 
 void yyerror(const char *s);
 #define YYDEBUG 1
-Write_function fn;
+write fn;
 ofstream fout;
 %}
 
