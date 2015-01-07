@@ -12,7 +12,7 @@ extern "C" FILE *yyin;
 
 void yyerror(const char *s);
 #define YYDEBUG 1
-Write_function fn;
+write fn;
 ofstream fout;
 %}
 
@@ -22,33 +22,27 @@ ofstream fout;
 	float f;
 	char* s;
 }
-%token <i>  serial_no ;
+%token <i>  jc_count mi_count;
 %token <f>  nodes beam_x beam_y;
-%token <s> line1 line2 line3 entity_name entity_type blank;
+%token <s>  join_coordinates member_incidences; 
 
 %%
 
 FELT:/*empty*/
-	FELT entity_name	{ fout <<"JOINT COORDINATES"; }
-	| FELT entity_type	{ fout <<"\nMEMBER INCIDENTS"; }
-	| FELT line1		{ fout << ""; }
-	| FELT line2		{ fout << ""; }
-	| FELT line3 		{ fout << ""; }
-	| FELT nodes		{ fout << $2<<" ";}
-	| FELT serial_no	{ fout <<"\n"<<$2<<" ";}
-	| FELT beam_x		{ fout << $2<<" ";}
-	| FELT beam_y		{ fout << $2 << "; "; }
-	| FELT blank		{ fout << ""; }
-	| entity_name		{ fout <<"JOINT COORDINATES"; }
-	| entity_type		{ fout <<"\nMEMBER INCIDENTS"; }
-	| line1			{ fout << ""<<endl; }
-	| line2			{ fout << "" <<endl; }
-	| line3			{ fout << ""<< endl; }
-	| nodes			{ fout << $1<<" "; }
-	| serial_no		{ fout <<"\n"<<$1<<" "; }
-	| beam_x		{ fout << $1; }
-	| beam_y		{ fout << $1 << ";\n"; }
-	| blank			{ fout <<""; }
+	  FELT jc_count			{}
+	| FELT mi_count			{cout << $2 << endl;}
+	| FELT join_coordinates		{fn.write_join_coordinates($2);;}
+	| FELT member_incidences	{cout << $2 << endl;  }
+	| FELT nodes			{cout << $2 << endl; }
+	| FELT beam_x			{ cout << $2 << endl;}
+	| FELT beam_y			{cout << $2 << endl; }
+	| jc_count			{}
+	| mi_count			{cout << $1 << endl;}
+	| join_coordinates		{ fn.write_join_coordinates($1);}
+	| member_incidences		{cout << $1 << endl;  }
+	| nodes				{cout << $1 << endl; }
+	| beam_x			{ cout<< $1 << endl; }
+	| beam_y			{cout<< $1 << endl; }
 	;	
 %%
 
@@ -60,8 +54,8 @@ main()
 		cout << "I can't open this file" << endl;
 		return -1;
 	}
-	time_t now = time(0);
-	char* dt = ctime(&now);
+//	time_t now = time(0);
+//	char* dt = ctime(&now);
 
         yyin = text; //flex reads its input from yyin
 
@@ -76,8 +70,8 @@ main()
 	}
 */	
 	fn.write_function();
-	fout.open("staad_file.std", std::ofstream::out);
-	fout << "STAAD SPACE\nSTART JOB INFORMATION\nENGINEER DATE "<<dt<<"END JOB INFORMATION\nINPUT WIDTH 79\nUNIT METER KN"<<endl;
+/*	fout.open("staad_file.std", std::ofstream::out);
+	fout << "STAAD SPACE\nSTART JOB INFORMATION\nENGINEER DATE "<<dt<<"END JOB INFORMATION\nINPUT WIDTH 79\nUNIT METER KN"<<endl;*/
 	do{
 	 yyparse(); //This function reads tokens, executes actions, and 
 		    //ultimately returns when it encounters end-of-input or an unrecoverable syntax.
