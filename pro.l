@@ -54,10 +54,16 @@ text			[a-zA-Z]+
 nodes			[\t]*(=){digits}+
 beamx			(nodes=)\[{digits}+
 beamy			[,]{digits}+
+jc_count                (nodes=){digits}+
+mi_count                (beam=){digits}+
 
 %%
 
 [ \n]
+
+jc_count                        { yylval.i = splitnode(yytext); return jc_count;}
+
+mi_count                        { yylval.i = splitnode(yytext); return mi_count;}
  				
 problem\ description		{ yylval.s = (yytext); return line1; }
 
@@ -65,9 +71,9 @@ problem\ description		{ yylval.s = (yytext); return line1; }
 
 ^nodes=[a-zA-Z0-9]*\n$		{yylval.s = (yytext); return line3; }
 
-^nodes\ *			{ yylval.s = (yytext); return entity_name; }
+^nodes\ *			{ yylval.s = (yytext); return joint_coordinates; }
 
-^beam\ elements  		{ yylval.s = (yytext); return entity_type; }
+^beam\ elements  		{ yylval.s = (yytext); return member_incidences; }
 
 ^[0-9]+				{ yylval.i = atoi(yytext); return serial_no; }
 
