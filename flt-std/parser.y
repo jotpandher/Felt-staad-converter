@@ -77,40 +77,6 @@ int main(int argc, char **argv)
 
         cout << endl << out_file << " has been generated in the same directory\n" << endl;
 
-/*	string file_name, input_file, input_text;
-
-	 FILE *text= fopen("beam.flt", "r");
- 	if (!text) {
-		cout << "I can't open this file" << endl;
-		return -1;
-	}
-	time_t now = time(0);
-	char* dt = ctime(&now);
-
-        yyin = text; //flex reads its input from yyin
-
-	while(1)
-	{
-		input_text = fgetc(yyin);
-		if( feof(yyin) )
-		{
-			break;
-		}
-		cout << input_text;
-	}
-*/	
-/*	w.write_function();
-	fout.open("staad_file.std", std::ofstream::out);
-	fout << "STAAD SPACE\nSTART JOB INFORMATION\nENGINEER DATE "<<dt<<"END JOB INFORMATION\nINPUT WIDTH 79\nUNIT METER KN"<<endl;
-	do{
-	 yyparse(); //This function reads tokens, executes actions, and 
-		    //ultimately returns when it encounters end-of-input or an unrecoverable syntax.
-
-	} while (!feof(yyin));
-
-
-// 	w.writeFeltFile("nodes");
-*/
 	return 0;
 }
 
