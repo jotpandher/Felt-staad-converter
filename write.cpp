@@ -1,48 +1,88 @@
-#include "write.h"
-	void Write_function::write_function()
-	{
-		cout<<"\nOUTPUT FILE GENERATED IS: staad_file.std\n";
-		/*cin>> file_name;
-		input_file = file_name + ".flt";
-		output_file = file_name + ".std";
-		ofstream f(output_file.c_str(), ios::out);
-		*/
-	}	
+#include"write.h"
 
-	void Write_function::write_end_function(string symbol, int times)
+void write::write_header(string f_name)
+{
+        time_t now = time(0);
+        char* dt = ctime(&now);
+        out_file = f_name;
+        ofstream f(out_file.c_str(), ios::out);
+        f << "STAAD SPACE" << endl; 
+	f << "START JOB INFORMATION" << endl;
+	f << "ENGINEER DATE "<< dt << "END JOB INFORMATION" << endl;
+	f << "INPUT WIDTH 79\nUNIT METER KN"<< endl;	
+}
+
+void write::store_values(char nodes_beams, float value, int i)
+{
+        if (nodes_beams == 'n') {
+            jc[i] = value;
+        } else if (nodes_beams == 'b') {
+            mi[i] = value;
+        }
+}
+
+void write::counter(char nodes_beams, int value)
+{
+        if (nodes_beams == 'n') {
+            jc_count = value;
+        } else if (nodes_beams == 'b') {
+            mi_count = value;
+        }	
+}
+
+void write::write_nodes()
+{
+	ofstream f(out_file.c_str(), ios::app);
+	for (int j = 0; j < jc_count; j++ )
 	{
-		for(int n= 0; n< times; n++)
-		{
-			cout<< symbol;	
-		}
-		cout<<endl; 
+	    f << j+1;
+	    for (int i = j; i < j+3; i++)
+	    {
+		f << " " << jc[i];
+	    }
+	    f << "; ";
 	}
+	f << endl;
+}
 
-	void Write_function::writeFeltFile(std::string s)
-	{
-		ofstream f(output_file.c_str(), ios::app); //c_str() ????
-		
-		if (s.compare("nodes")==0)
-		{ 
-			f<<" JOINT COORDINATES";
-		}
-		else if (s.compare("beam elements")==0)
-		{ 
-			f<<"MEMBER INCIDENCES";
-		}
-	}
+void write::write_joint_coordinates()
+{
+	ofstream f(out_file.c_str(), ios::app);
+	f << endl << "JOINT COORDINATES" << endl;
+}
 
-	void Write_function::writeFeltFile_Joint_coordinates(float s, char nodes)
-	{
-		cout<<"***********shaina************";
-		ofstream f(output_file.c_str(), ios::app);
-		if (nodes=='x')
-			f<<s;
-		else if(nodes=='y')
-			f<< s;
-		 else if(nodes=='z')
-			f<< s;
-		f.close();
-	}
+void write::write_elements()
+{
+        ofstream f(out_file.c_str(), ios::app);
+        for (int j = 0; j < mi_count; j++ )
+        {
+            f << j+1;
+            for (int i = j; i < j+2; i++)
+            {
+                f << " " << mi[i];
+            }
+            f << "; ";
+        }
+        f << endl;
+}
 
+void write::write_member_incidences()
+{       
+        ofstream f(out_file.c_str(), ios::app);
+        f << endl << "MEMBER INCIDENCES" << endl;
+}
 
+void write::write_end()
+{
+        ofstream f(out_file.c_str(), ios::app);
+	f << endl << "FINISH" << endl;
+}
+
+void write::write_content()
+{
+	write_joint_coordinates();
+	write_nodes();
+	write_member_incidences();
+	write_elements();
+	write_end();
+}

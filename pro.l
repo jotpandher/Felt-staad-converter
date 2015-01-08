@@ -7,7 +7,7 @@ using namespace std;
 
 #include "pro.tab.h"
 
-float splitnode( string s )
+float splitequaloperator( string s )
 {
         string delimiter = "=";
 	float t;
@@ -49,39 +49,40 @@ float splitbeamy( string s )
 
 %}
 
-digits			[0-9]+	
-float			{digits}*"."{digits}	
-nodes			[\t]*(=){digits}+
-beamx			(nodes=)\[{digits}+
-beamy			[,]{digits}+
-jc_count		(nodes=){digits}+
-mi_count		(beam=){digits}+
+space           [[:space:]]
+endl            [\r]*[\n]*
+digits		[0-9]+	
+float		{digits}*"."{digits}	
+nodes		[\t]*(=){digits}
+beamx		(nodes=)\[{digits}
+beamy		[,]{digits}
+jc_count	(nodes)(=){digits}
+mi_count	(elements=){digits}
 
 %%
 
-[ \n]
+[ \n\t]
 
-jc_count                        { yylval.i = splitnode(yytext); return jc_count;}
+{jc_count}			{ yylval.i = splitequaloperator(yytext); return jc_count;}
 
-mi_count                        { yylval.i = splitnode(yytext); return mi_count;}
+
+{mi_count}			{ yylval.i = splitequaloperator(yytext); return mi_count;}
  				
-problem\ description		{ yylval.s = (yytext); return line1; }
+^(nodes){endl}			{ yylval.s = strdup(yytext); return joint_coordinates; }
 
-^title=\"[a-zA-Z0-9]*$\"        {yylval.s = (yytext); return line2; }
+^(beam{space}elements){endl}	{ yylval.s = strdup(yytext); return member_incidences; }
 
-^nodes\ *			{ yylval.s = (yytext); return joint_coordinates; }
+x{nodes}                        { yylval.f = splitequaloperator(yytext); return x_nodes; }
 
-^beam\ elements  		{ yylval.s = (yytext); return member_incidences; }
+y{nodes}                        { yylval.f = splitequaloperator(yytext); return y_nodes; }
 
-z{nodes}      		{ yylval.f = splitnode(yytext); return znodes; }
+z{nodes}			{ yylval.f = splitequaloperator(yytext); return z_nodes; }
 
-problem\ description	{ yylval.s = (yytext); return line1; }
+{beamx}				{ yylval.f = splitbeamx(yytext); return beam_x; }
 
-^nodes=[a-zA-Z0-9]*\n$	{ yylval.s = (yytext); return line3; }
+{beamy}                         { yylval.f = splitbeamy(yytext); return beam_y; }
 
-^[0-9]+			{ yylval.i = atoi(yytext); return serial_no; }
-
-[a-zA-Z]*=[0-9]*	{ yylval.f = splitnode(yytext); return num;}
+end				{ return end; }
 
 .		;
 
