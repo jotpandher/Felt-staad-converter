@@ -18,16 +18,16 @@ char mode = 'n';
 %}
 
 /**
- %union is used to declare the types for various tokens used. 
- It is particularly used when we need to used more than one type
- */
+* %union is used to declare the types for various tokens used. 
+* It is particularly used when we need to used more than one type
+*/
 %union{
 	float f;
 	char *c;
 }
 
 /**
- Token declaration with appropriate type
+* Token declaration with appropriate type
  */
 %token <c> JC MI DESCRIPTION
 %token <f> DIGIT
@@ -36,7 +36,7 @@ char mode = 'n';
 %%
 
 /**
- Grammar rules
+*Grammar rules
  */
 
 converter:

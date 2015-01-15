@@ -3,11 +3,11 @@
 #include <string>
 using namespace std;
 
-#define YY_DECL extern "C" int yylex()
+#define YY_DECL extern "C" int yylex() /** declearative block*/
 #include "parser.tab.h"
 
 %}
-
+/**tokens as input */
 space		[[:space:]]
 digit		[0-9]+
 integer		{digit}
@@ -23,15 +23,17 @@ date            ({digit}-{month}-{digit})
 width           (WIDTH{space}{digit})
 
 %%
-[ \t\n]			;
+[ \t\n]			;     /**ignore space, tab, next line */
 
-{jc}			{ yylval.c = strdup (yytext); return JC; }
+{jc}			{ yylval.c = strdup (yytext); return JC; }   /** yylval = value reading 
+									* strdup = string duplicate function
+										*/
 
 {mi}			{ yylval.c = strdup (yytext); return MI; }
 
 {integer}|{float}	{ yylval.f = atof (yytext); return DIGIT; }
 
-{width}
+{width}									/** use of tokens */
 
 {date}			{ yylval.c = strdup (yytext); return DESCRIPTION; }
 
@@ -39,5 +41,5 @@ width           (WIDTH{space}{digit})
 
 {finish}		{ return FINISH; }
 
-.			;
+.			;				/** any digit except new line */
 

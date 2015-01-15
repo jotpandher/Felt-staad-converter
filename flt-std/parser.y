@@ -13,9 +13,14 @@ extern "C" FILE *yyin;
 void yyerror(const char *s);
 #define YYDEBUG 1
 
-write w;
-int n_i = 0, b_i = 0;
+write w;	/** call main class and create objeect w */
+int n_i = 0, b_i = 0;		/** no of nodes and no of beams */
 %}
+
+/**
+* %union is used to declare the types for various tokens used. 
+* It is particularly used when we need to used more than one type
+*/
 
 %union{
 	
@@ -23,11 +28,18 @@ int n_i = 0, b_i = 0;
 	float f;
 	char* s;
 }
+
+/**
+* Token declaration with appropriate type
+ */
+
 %token <i>  jc_count mi_count;
 %token <f>  nodes beam_x beam_y x_nodes y_nodes z_nodes;
 %token <s>  joint_coordinates member_incidences end; 
 
 %%
+/** Grammar rules
+*/
 
 FELT:/*empty*/
 	FELT jc_count			{ w.counter('n', $2); }
@@ -75,9 +87,9 @@ int main(int argc, char **argv)
                 yyparse(); //keep on calling above grammar rules 
         }
 
-        cout << "*************************************************************************" << endl;
-        cout << "*	" << out_file << " has been generated in the same directory		*" << endl;
-        cout << "*************************************************************************\n" << endl;
+	cout << "*************************************************************************" << endl;
+	cout << "*	" << out_file << " has been generated in the same directory		*" << endl;
+	cout << "*************************************************************************\n" << endl;
 
 	return 0;
 }
